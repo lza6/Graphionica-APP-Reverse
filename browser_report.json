@@ -1,0 +1,57 @@
+{
+  "base": "http://127.0.0.1:8960",
+  "checks": [
+    {
+      "check": "summary cards rendered",
+      "ok": true,
+      "detail": [
+        "贴纸包 / 贴纸 48 /1682 张",
+        "PREMIUM 贴纸 1215 服务端不校验",
+        "动画贴纸 312 webp 动图"
+      ]
+    },
+    {
+      "check": "sticker tiles serve real pixels",
+      "ok": true,
+      "detail": "3/60 loaded"
+    },
+    {
+      "check": "sticker tile uses local proxy",
+      "ok": true,
+      "detail": "http://127.0.0.1:8960/asset/s/1_flowers/preview/1.webp"
+    },
+    {
+      "check": "template tiles serve real pixels",
+      "ok": true,
+      "detail": "2/24 loaded"
+    },
+    {
+      "check": "template layer metadata visible",
+      "ok": true,
+      "detail": "9x16 · 3 层 · Autumn / And the sun took a step back, the leav"
+    },
+    {
+      "check": "manifest generated",
+      "ok": true,
+      "detail": [
+        "{",
+        "  \"by_kind\": {"
+      ]
+    },
+    {
+      "check": "manifest download link enabled",
+      "ok": true,
+      "detail": "下载 manifest.json (4528 条)"
+    },
+    {
+      "check": "missing asset answers 404",
+      "ok": true,
+      "detail": 404
+    }
+  ],
+  "console_errors": [
+    "Failed to load resource: the server responded with a status of 404 (NOT FOUND)"
+  ],
+  "ok": true,
+  "generated_at": "2026-10-29T15:02:21Z"
+}

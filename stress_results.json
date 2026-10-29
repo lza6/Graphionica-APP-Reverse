@@ -1,0 +1,147 @@
+{
+  "generated_at": "2026-10-29T15:02:30Z",
+  "target": "http://127.0.0.1:8960",
+  "gateway": {
+    "cache_age_s": {
+      "home": 260.3,
+      "stickers": 259.3,
+      "templates": 258.1
+    },
+    "cached": {
+      "home": true,
+      "stickers": true,
+      "templates": true
+    },
+    "ok": true,
+    "port": 8960,
+    "ttl_s": 600.0
+  },
+  "scenarios": [
+    {
+      "name": "health",
+      "ok": 400,
+      "failed": 0,
+      "wall_s": 1.026,
+      "rps": 389.75,
+      "mean_ms": 39.95,
+      "p50_ms": 37.69,
+      "p90_ms": 44.4,
+      "p95_ms": 53.27,
+      "p99_ms": 114.76,
+      "max_ms": 123.0,
+      "errors": {}
+    },
+    {
+      "name": "catalog_summary",
+      "ok": 300,
+      "failed": 0,
+      "wall_s": 1.198,
+      "rps": 250.5,
+      "mean_ms": 62.18,
+      "p50_ms": 62.41,
+      "p90_ms": 70.18,
+      "p95_ms": 82.91,
+      "p99_ms": 93.13,
+      "max_ms": 96.0,
+      "errors": {}
+    },
+    {
+      "name": "stickers_page",
+      "ok": 200,
+      "failed": 0,
+      "wall_s": 0.684,
+      "rps": 292.41,
+      "mean_ms": 26.8,
+      "p50_ms": 26.09,
+      "p90_ms": 32.77,
+      "p95_ms": 34.78,
+      "p99_ms": 55.65,
+      "max_ms": 59.67,
+      "errors": {}
+    },
+    {
+      "name": "templates_page",
+      "ok": 200,
+      "failed": 0,
+      "wall_s": 0.588,
+      "rps": 340.12,
+      "mean_ms": 22.92,
+      "p50_ms": 23.3,
+      "p90_ms": 27.58,
+      "p95_ms": 28.58,
+      "p99_ms": 30.74,
+      "max_ms": 34.25,
+      "errors": {}
+    },
+    {
+      "name": "passthrough_home_incremental",
+      "ok": 300,
+      "failed": 0,
+      "wall_s": 0.637,
+      "rps": 471.22,
+      "mean_ms": 32.75,
+      "p50_ms": 32.36,
+      "p90_ms": 37.04,
+      "p95_ms": 54.6,
+      "p99_ms": 64.41,
+      "max_ms": 67.03,
+      "errors": {}
+    },
+    {
+      "name": "asset_hot",
+      "ok": 120,
+      "failed": 0,
+      "wall_s": 0.314,
+      "rps": 382.01,
+      "mean_ms": 20.22,
+      "p50_ms": 19.57,
+      "p90_ms": 27.15,
+      "p95_ms": 28.53,
+      "p99_ms": 37.57,
+      "max_ms": 40.94,
+      "errors": {}
+    },
+    {
+      "name": "error_pack",
+      "ok": 60,
+      "failed": 0,
+      "wall_s": 0.173,
+      "rps": 347.37,
+      "mean_ms": 11.39,
+      "p50_ms": 9.03,
+      "p90_ms": 18.24,
+      "p95_ms": 32.79,
+      "p99_ms": 37.2,
+      "max_ms": 37.2,
+      "errors": {}
+    },
+    {
+      "name": "error_version",
+      "ok": 60,
+      "failed": 0,
+      "wall_s": 0.226,
+      "rps": 266.04,
+      "mean_ms": 14.17,
+      "p50_ms": 11.18,
+      "p90_ms": 25.62,
+      "p95_ms": 29.87,
+      "p99_ms": 48.39,
+      "max_ms": 48.39,
+      "errors": {}
+    },
+    {
+      "name": "error_asset_missing",
+      "ok": 4,
+      "failed": 0,
+      "wall_s": 3.128,
+      "rps": 1.28,
+      "mean_ms": 1444.75,
+      "p50_ms": 808.43,
+      "p90_ms": 3127.26,
+      "p95_ms": 3127.26,
+      "p99_ms": 3127.26,
+      "max_ms": 3127.26,
+      "errors": {}
+    }
+  ]
+}

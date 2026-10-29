@@ -1,0 +1,26 @@
+# reverse-engineering artifacts that must never be published
+jadx_out/
+unzip/
+apktool_out/
+apk_patched/
+*.apk
+
+# runtime state
+assets/
+cache/
+static/*.png
+demo_*.png
+!docs/screenshots/*.png
+server_out.log
+server_err.log
+__pycache__/
+*.pyc
+
+# local samples pulled from the live API (third-party content, kept out of the repo)
+home.json
+stickers.json
+templates.json
+stickers_p.json
+home_p.json
+st_v211.json
+benchmark_data/

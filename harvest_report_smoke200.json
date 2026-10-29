@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-10-29T14:57:40Z",
+  "catalogs": {
+    "home": 3,
+    "stickers": 211,
+    "templates": 161
+  },
+  "queued": 200,
+  "downloaded": 140,
+  "skipped": 60,
+  "missing_404": 0,
+  "failed": 0,
+  "bytes": 14020410,
+  "megabytes": 13.4,
+  "wall_s": 28.7,
+  "throughput_mb_s": 0.47,
+  "failures": []
+}

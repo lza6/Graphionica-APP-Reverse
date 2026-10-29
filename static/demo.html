@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Graphionica 4.6.1 · 素材目录网关</title>
+<style>
+  :root {
+    --bg: #0d0f14; --panel: #161a22; --panel-2: #1d222c; --line: #262d3a;
+    --fg: #e8ecf4; --muted: #8e9aad; --accent: #6ee7ff; --warn: #ffb454; --ok: #61d19a;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg);
+    font: 14px/1.55 "Segoe UI", "Microsoft YaHei", system-ui, sans-serif; }
+  header { padding: 22px 26px 14px; border-bottom: 1px solid var(--line); }
+  h1 { margin: 0 0 4px; font-size: 19px; letter-spacing: .2px; }
+  h1 span { color: var(--accent); }
+  .sub { color: var(--muted); font-size: 12.5px; }
+  .wrap { padding: 20px 26px 60px; max-width: 1500px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+  .card .k { color: var(--muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: .6px; }
+  .card .v { font-size: 20px; font-weight: 600; margin-top: 3px; }
+  .card .v small { font-size: 12px; color: var(--muted); font-weight: 400; }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 20px 0 14px; }
+  .tabs { display: flex; gap: 6px; margin-right: auto; }
+  .tab, button, select, input {
+    background: var(--panel-2); color: var(--fg); border: 1px solid var(--line);
+    border-radius: 8px; padding: 7px 13px; font-size: 13px; cursor: pointer; font-family: inherit;
+  }
+  .tab.active { border-color: var(--accent); color: var(--accent); }
+  input { cursor: text; min-width: 170px; }
+  button:hover, .tab:hover { border-color: #3a475c; }
+  .grid { display: grid; gap: 10px; }
+  .grid.stickers { grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); }
+  .grid.templates { grid-template-columns: repeat(auto-fill, minmax(178px, 1fr)); }
+  .tile { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+    position: relative; }
+  .tile img { display: block; width: 100%; aspect-ratio: 1; object-fit: contain;
+    background: repeating-conic-gradient(#1b2029 0 25%, #161a22 0 50%) 0 0/18px 18px; }
+  .tile.tpl img { aspect-ratio: 9/16; object-fit: cover; }
+  .tile .meta { padding: 7px 9px; font-size: 11px; color: var(--muted); display: flex;
+    justify-content: space-between; gap: 6px; align-items: center; }
+  .tile .meta b { color: var(--fg); font-weight: 500; font-size: 11.5px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .badge { font-size: 10px; padding: 1px 5px; border-radius: 4px; border: 1px solid var(--line); }
+  .badge.premium { color: var(--warn); border-color: #4a3a1c; background: #2a2115; }
+  .badge.anim { color: var(--accent); border-color: #1d3b46; background: #14262d; }
+  .tile .texts { padding: 0 9px 8px; font-size: 10.5px; color: #9aa7bb; max-height: 34px; overflow: hidden; }
+  .note { background: #17202b; border: 1px solid #23384a; border-radius: 10px; padding: 12px 14px;
+    font-size: 12.5px; color: #a8bdd2; margin: 16px 0; }
+  code { background: #101720; padding: 1px 5px; border-radius: 4px; color: #9fe6ff; font-size: 12px; }
+  pre { background: #0b1017; border: 1px solid var(--line); border-radius: 8px; padding: 12px;
+    overflow: auto; font-size: 12px; color: #b9cbe0; }
+  .empty { color: var(--muted); padding: 30px 0; text-align: center; }
+  .err { color: #ff8b8b; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Graphionica <span>4.6.1</span> · 素材目录网关 <span style="font-size:12px;color:var(--muted)">(逆向 demo)</span></h1>
+  <div class="sub">上游 3 个零鉴权目录端点 + 双 CDN 镜像 · 本地 TTL 缓存 + 素材落地缓存 · 端口 <code id="port">8960</code></div>
+</header>
+
+<div class="wrap">
+  <div class="cards" id="cards"></div>
+
+  <div class="note">
+    上游 <code>POST /api/v2/templates</code> 实测 15–25s（606KB），网关用 single-flight + TTL 缓存吸收；
+    素材经 <code>/asset/&lt;kind&gt;/&lt;path&gt;</code> 落地到磁盘，二次访问走本地。
+    该 App <b>没有</b> AI 生成端点，远端能力全部是贴纸 / 故事模板目录 + 素材 CDN。
+  </div>
+
+  <div class="toolbar">
+    <div class="tabs">
+      <button class="tab active" data-view="stickers">贴纸</button>
+      <button class="tab" data-view="templates">模板</button>
+      <button class="tab" data-view="export">导出清单</button>
+    </div>
+    <select id="pack"><option value="">全部包</option></select>
+    <input id="q" placeholder="按包名筛选…" />
+    <label class="row" style="font-size:12px;color:var(--muted)">
+      <input type="checkbox" id="premium" checked style="min-width:auto" /> 含 premium
+    </label>
+    <button id="reload">刷新</button>
+  </div>
+
+  <div id="view-stickers">
+    <div class="grid stickers" id="stickerGrid"></div>
+    <div class="row" style="justify-content:center;margin-top:18px">
+      <button id="moreStickers">加载更多</button>
+    </div>
+  </div>
+
+  <div id="view-templates" hidden>
+    <div class="grid templates" id="templateGrid"></div>
+    <div class="row" style="justify-content:center;margin-top:18px">
+      <button id="moreTemplates">加载更多</button>
+    </div>
+  </div>
+
+  <div id="view-export" hidden>
+    <div class="row" style="margin-bottom:10px">
+      <button id="loadManifest">生成全量清单</button>
+      <a id="manifestLink" hidden download>下载 manifest.json</a>
+    </div>
+    <pre id="manifestOut">点击「生成全量清单」</pre>
+  </div>
+</div>
+
+<script>
+const state = { view: 'stickers', stickerPage: 1, templatePage: 1, packs: {} };
+const $ = (id) => document.getElementById(id);
+
+async function jget(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`${url} -> HTTP ${r.status}`);
+  return r.json();
+}
+
+function card(k, v, extra = '') {
+  return `<div class="card"><div class="k">${k}</div><div class="v">${v}${extra ? ` <small>${extra}</small>` : ''}</div></div>`;
+}
+
+async function loadSummary() {
+  try {
+    const s = await jget('/catalog/summary');
+    const noAi = '仅目录';
+    $('cards').innerHTML = [
+      card('贴纸包 / 贴纸', s.stickers.packs, `/${s.stickers.items} 张`),
+      card('premium 贴纸', s.stickers.premium_items, '服务端不校验'),
+      card('动画贴纸', s.stickers.animated_items, 'webp 动图'),
+      card('模板包 / 模板', s.templates.packs, `/${s.templates.items} 套`),
+      card('模板内贴纸 tS', s.templates.template_stickers, ''),
+      card('素材路径总数', s.assets.referenced_paths, '去重后'),
+      card('目录版本', `h${s.home.version} s${s.stickers.version} t${s.templates.version}`, noAi),
+    ].join('');
+  } catch (e) {
+    $('cards').innerHTML = `<div class="card"><div class="k">错误</div><div class="v err">${e.message}</div></div>`;
+  }
+}
+
+function stickerTile(it) {
+  return `<div class="tile">
+    <a href="${it.proxy}" target="_blank"><img loading="lazy" src="${it.preview_proxy}" alt=""></a>
+    <div class="meta"><b>${it.pack || ''}</b>
+      ${it.premium ? '<span class="badge premium">premium</span>' : ''}
+      ${it.animated ? '<span class="badge anim">anim</span>' : ''}
+    </div>
+    <div class="texts">${it.width}×${it.height} · #${it.id}</div>
+  </div>`;
+}
+
+function templateTile(it) {
+  const texts = (it.texts || []).join(' / ').slice(0, 70);
+  return `<div class="tile tpl">
+    <a href="${it.url}" target="_blank"><img loading="lazy" src="${it.proxy}" alt=""></a>
+    <div class="meta"><b>${it.pack || ''}</b>
+      ${it.premium ? '<span class="badge premium">premium</span>' : ''}
+    </div>
+    <div class="texts">${it.aspect || ''} · ${it.layer_count || 0} 层${texts ? ' · ' + texts : ''}</div>
+  </div>`;
+}
+
+async function loadStickers(reset = false) {
+  if (reset) { state.stickerPage = 1; $('stickerGrid').innerHTML = ''; }
+  const params = new URLSearchParams({ page: state.stickerPage, size: 60 });
+  if ($('pack').value) params.set('pack', $('pack').value);
+  if (!$('premium').checked) params.set('include_premium', '0');
+  if ($('q').value.trim()) params.set('q', $('q').value.trim());
+  try {
+    const data = await jget('/catalog/stickers?' + params);
+    iife(data);
+    $('stickerGrid').insertAdjacentHTML('beforeend', data.items.map(stickerTile).join(''));
+    if (reset) {
+      Object.entries(data.packs).forEach(([id, name]) => {
+        const o = document.createElement('option');
+        o.value = id; o.textContent = name; $('pack').appendChild(o);
+      });
+    }
+    $('moreStickers').hidden = state.stickerPage * 60 >= data.meta.total;
+    if (!data.meta.total) $('stickerGrid').innerHTML = '<div class="empty">没有匹配的贴纸</div>';
+  } catch (e) {
+    $('stickerGrid').innerHTML = `<div class="empty err">${e.message}</div>`;
+  }
+  function iife(d) { state.total = d.meta.total; }
+}
+
+async function loadTemplates(reset = false) {
+  if (reset) { state.templatePage = 1; $('templateGrid').innerHTML = ''; }
+  const params = new URLSearchParams({ page: state.templatePage, size: 24 });
+  if ($('pack').value) params.set('pack', $('pack').value);
+  if (!$('premium').checked) params.set('include_premium', '0');
+  try {
+    const data = await jget('/catalog/templates?' + params);
+    $('templateGrid').insertAdjacentHTML('beforeend', data.items.map(templateTile).join(''));
+    $('moreTemplates').hidden = state.templatePage * 24 >= data.meta.total;
+    if (!data.meta.total) $('templateGrid').innerHTML = '<div class="empty">没有匹配的模板</div>';
+  } catch (e) {
+    $('templateGrid').innerHTML = `<div class="empty err">${e.message}</div>`;
+  }
+}
+
+$('moreStickers').onclick = () => { state.stickerPage++; loadStickers(); };
+$('moreTemplates').onclick = () => { state.templatePage++; loadTemplates(); };
+$('reload').onclick = () => { loadSummary(); switchTo(state.view, true); };
+$('pack').onchange = () => switchTo(state.view, true);
+$('premium').onchange = () => switchTo(state.view, true);
+$('q').oninput = debounce(() => loadStickers(true), 300);
+
+function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+
+function switchTo(view, reset = true) {
+  state.view = view;
+  document.querySelectorAll('.tab').forEach((b) => b.classList.toggle('active', b.dataset.view === view));
+  ['stickers', 'templates', 'export'].forEach((v) => { $('view-' + v).hidden = v !== view; });
+  if (view === 'stickers') loadStickers(reset);
+  if (view === 'templates') loadTemplates(reset);
+}
+
+document.querySelectorAll('.tab').forEach((b) => { b.onclick = () => switchTo(b.dataset.view); });
+
+$('loadManifest').onclick = async () => {
+  $('manifestOut').textContent = '生成中（首次需拉上游目录，模板端点可能 15–25s）…';
+  try {
+    const m = await jget('/export/manifest.json');
+    $('manifestOut').textContent = JSON.stringify(m.counts, null, 2) + '\n\n' +
+      m.assets.slice(0, 12).map((a) => `${a.kind}  ${a.path}  ${a.url}`).join('\n') +
+      `\n… 共 ${m.counts.total} 条`;
+    const blob = new Blob([JSON.stringify(m, null, 2)], { type: 'application/json' });
+    const link = $('manifestLink');
+    link.href = URL.createObjectURL(blob);
+    link.textContent = `下载 manifest.json (${m.counts.total} 条)`;
+    link.hidden = false;
+  } catch (e) {
+    $('manifestOut').textContent = '失败: ' + e.message;
+  }
+};
+
+loadSummary();
+loadStickers(true);
+</script>
+</body>
+</html>

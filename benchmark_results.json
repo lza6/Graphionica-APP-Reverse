@@ -1,0 +1,194 @@
+{
+  "generated_at": "2026-10-29T14:53:10Z",
+  "gateway": "http://127.0.0.1:8960",
+  "scenarios": [
+    {
+      "group": "cache-hit",
+      "label": "gateway /health",
+      "median_ms": 15.8,
+      "min_ms": 6.0,
+      "max_ms": 18.0,
+      "samples_ms": [
+        6.0,
+        18.0,
+        15.8
+      ],
+      "note": ""
+    },
+    {
+      "group": "cache-hit",
+      "label": "gateway /catalog/summary",
+      "median_ms": 5.5,
+      "min_ms": 4.0,
+      "max_ms": 24.4,
+      "samples_ms": [
+        5.5,
+        24.4,
+        4.0
+      ],
+      "note": ""
+    },
+    {
+      "group": "cache-hit",
+      "label": "gateway /catalog/stickers (p1,60)",
+      "median_ms": 5.5,
+      "min_ms": 5.1,
+      "max_ms": 26.8,
+      "samples_ms": [
+        26.8,
+        5.1,
+        5.5
+      ],
+      "note": ""
+    },
+    {
+      "group": "cache-hit",
+      "label": "gateway /catalog/templates (p1,24)",
+      "median_ms": 5.3,
+      "min_ms": 4.9,
+      "max_ms": 5.3,
+      "samples_ms": [
+        5.3,
+        5.3,
+        4.9
+      ],
+      "note": ""
+    },
+    {
+      "group": "cache-hit",
+      "label": "gateway /api/v2/home (incremental)",
+      "median_ms": 4.1,
+      "min_ms": 4.1,
+      "max_ms": 27.3,
+      "samples_ms": [
+        4.1,
+        4.1,
+        27.3
+      ],
+      "note": ""
+    },
+    {
+      "group": "cache-hit",
+      "label": "gateway /export/manifest.json",
+      "median_ms": 138.7,
+      "min_ms": 134.5,
+      "max_ms": 145.9,
+      "samples_ms": [
+        145.9,
+        134.5,
+        138.7
+      ],
+      "note": ""
+    },
+    {
+      "group": "asset-cold",
+      "label": "gateway /asset/s/1_flowers/preview/1.webp",
+      "median_ms": 476.2,
+      "min_ms": 476.2,
+      "max_ms": 476.2,
+      "samples_ms": [
+        476.2
+      ],
+      "note": "本地无缓存 → 回源 CDN"
+    },
+    {
+      "group": "asset-warm",
+      "label": "gateway /asset/s/1_flowers/preview/1.webp",
+      "median_ms": 21.5,
+      "min_ms": 4.1,
+      "max_ms": 31.0,
+      "samples_ms": [
+        31.0,
+        4.1,
+        21.5
+      ],
+      "note": "本地磁盘命中"
+    },
+    {
+      "group": "upstream",
+      "label": "upstream POST /home",
+      "median_ms": 519.9,
+      "min_ms": 509.4,
+      "max_ms": 2083.2,
+      "samples_ms": [
+        2083.2,
+        509.4,
+        519.9
+      ],
+      "note": ""
+    },
+    {
+      "group": "upstream",
+      "label": "upstream POST /stickers",
+      "median_ms": 754.7,
+      "min_ms": 725.1,
+      "max_ms": 803.3,
+      "samples_ms": [
+        803.3,
+        725.1,
+        754.7
+      ],
+      "note": ""
+    },
+    {
+      "group": "upstream",
+      "label": "upstream POST /templates",
+      "median_ms": 1161.7,
+      "min_ms": 1126.9,
+      "max_ms": 1360.4,
+      "samples_ms": [
+        1360.4,
+        1161.7,
+        1126.9
+      ],
+      "note": "上游最慢端点"
+    },
+    {
+      "group": "upstream",
+      "label": "upstream CDN sticker (203KB)",
+      "median_ms": 1174.2,
+      "min_ms": 828.8,
+      "max_ms": 3217.6,
+      "samples_ms": [
+        3217.6,
+        1174.2,
+        828.8
+      ],
+      "note": ""
+    }
+  ],
+  "concurrency_ramp": [
+    {
+      "concurrency": 1,
+      "requests": 120,
+      "rps": 126.8,
+      "p50_ms": 5.8,
+      "p95_ms": 25.9,
+      "failed": 0
+    },
+    {
+      "concurrency": 4,
+      "requests": 120,
+      "rps": 261.0,
+      "p50_ms": 14.8,
+      "p95_ms": 20.6,
+      "failed": 0
+    },
+    {
+      "concurrency": 8,
+      "requests": 120,
+      "rps": 263.6,
+      "p50_ms": 26.3,
+      "p95_ms": 31.4,
+      "failed": 0
+    },
+    {
+      "concurrency": 16,
+      "requests": 120,
+      "rps": 201.2,
+      "p50_ms": 61.6,
+      "p95_ms": 195.1,
+      "failed": 0
+    }
+  ]
+}
